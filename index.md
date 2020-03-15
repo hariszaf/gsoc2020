@@ -5,7 +5,7 @@ Google Summer of Code: High dimensional sampling with applications to structural
 ## [Easy task](test_easy.html): 
 ### compile and run VolEsti. Use the R extension to visualize sampling in a polytope.
 
-## [Medium task](test_easy.html): 
+## [Medium task](test_medium.html): 
 ### import the [e.coli dataset](bigg.ucsd.edu/models/e_coli_core) from bigg and create a matrix in R
 
 ## [Hard task](test_easy.html): 
