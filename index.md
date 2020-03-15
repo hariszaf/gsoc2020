@@ -1,6 +1,8 @@
-## Info
+## Google Summer of Code
 
-Google Summer of Code: High dimensional sampling with applications to structural biology
+Here you can find how the [tests](https://github.com/GeomScale/gsoc2020/wiki/High-dimensional-sampling-with-applications-to-structural-biology#tests) for this project were approached.  
+
+Click on each task to see the relevant answers.
 
 ## [Easy task](test_easy.html): 
 ### compile and run VolEsti. Use the R extension to visualize sampling in a polytope.
