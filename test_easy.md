@@ -1,7 +1,7 @@
 ---
 title: "test_easy_markdown"
 author: "Haris Zafeiropoulos"
-date: "3/15/2020"
+date: '2020-03-15'
 output:
   html_document: 
     keep_md: yes
