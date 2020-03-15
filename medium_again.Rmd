@@ -1,0 +1,63 @@
+---
+title: "test_medium_markdown"
+author: "Haris Zafeiropoulos"
+date: '`r Sys.Date()`'
+output:
+  html_document: 
+    keep_md: yes
+editor_options:
+  chunk_output_type: console
+---
+
+## Import the e.coli data from bigg and create a matrix in R
+
+Here are the libraries needed
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, include=TRUE}
+library(jsonlite)
+library(dplyr)
+```
+
+
+## We first get the data.
+
+```{r get_the_data}
+data_url = "http://bigg.ucsd.edu/static/models/e_coli_core.json"
+destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.json"
+download.file(data_url, destination_file)
+```
+
+## Then we parse them.
+We need to parse the .json file we got, to get a matrix with the reactions and the metabolites that participate in them.
+
+```{r parse_them_to_get_a_matrix, echo=TRUE}
+data = jsonlite::fromJSON( destination_file )
+
+reactions = data$reactions
+
+new_data = data["reactions"]
+
+
+final_reactions = new_data$reactions$metabolites
+reactions_names = reactions$id
+table = cbind(reactions_names,final_reactions)
+
+table_as_matrix = as.matrix(table)
+
+head(table_as_matrix, 4)
+```
+
+
+
+### Result 
+Here you can see finally how a single reaction from the network we had, can be seen in the first line of our matrix. One molecule of f6p_c and one atp_c are cosnumed to produce one of adp_c, one of h_c and one of fdp_c.
+
+```{r pressure, echo=FALSE, fig.cap="One of the reactions of the metabolic network. You can see the metabolites that are consumed as well as those that are produced; the network (left) confirms what the matrix shows (right).", out.width = '100%'}
+knitr::include_graphics("https://raw.githubusercontent.com/hariszaf/gsoc2020/master/test_medium_files/figure-html/gsoc2020_reactions.png")
+```
+
+
