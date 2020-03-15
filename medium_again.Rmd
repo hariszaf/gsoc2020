@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Import the e.coli data from bigg and create a matrix in R
+## Support lower dimensional polytopes in volesti and use existing methods to sample from them.
 
 Here are the libraries needed
 

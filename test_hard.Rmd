@@ -1,0 +1,26 @@
+---
+title: "test_hard_markdown"
+author: "Haris Zafeiropoulos"
+date: '`r Sys.Date()`'
+output:
+  html_document: 
+    keep_md: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Support lower dimensional polytopes in volesti and use existing methods to sample from them
+
+Here are the libraries needed
+
+```{r libraries, include=TRUE}
+
+library(ggplot2)
+
+```
+
+

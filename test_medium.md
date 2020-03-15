@@ -9,15 +9,15 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Support lower dimensional polytopes in volesti and use existing methods to sample from them.
 
-Here are the libraries needed
 
+## R Markdown
 
 
 
 ```r
-library(jsonlite)
+#library(rjson)
+#library(tidyjson)
 library(dplyr)
 ```
 
@@ -38,8 +38,13 @@ library(dplyr)
 ##     intersect, setdiff, setequal, union
 ```
 
+```r
+library(jsonlite)
+```
 
-## We first get the data.
+## Including Plots
+
+
 
 
 ```r
@@ -48,8 +53,6 @@ destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.json"
 download.file(data_url, destination_file)
 ```
 
-## Then we parse them.
-We need to parse the .json file we got, to get a matrix with the reactions and the metabolites that participate in them.
 
 
 ```r
@@ -106,15 +109,4 @@ head(table_as_matrix, 4)
 ## 3 NA       NA       NA    NA       NA    NA   NA       NA    NA   
 ## 4 NA       NA       NA    NA       NA    NA   NA       NA    NA
 ```
-
-
-
-### Result 
-Here you can see finally how a single reaction from the network we had, can be seen in the first line of our matrix. One molecule of f6p_c and one atp_c are cosnumed to produce one of adp_c, one of h_c and one of fdp_c.
-
-<div class="figure">
-<img src="https://raw.githubusercontent.com/hariszaf/gsoc2020/master/test_medium_files/figure-html/gsoc2020_reactions.png" alt="One of the reactions of the metabolic network. You can see the metabolites that are consumed as well as those that are produced; the network (left) confirms what the matrix shows (right)." width="100%" />
-<p class="caption">One of the reactions of the metabolic network. You can see the metabolites that are consumed as well as those that are produced; the network (left) confirms what the matrix shows (right).</p>
-</div>
-
 
