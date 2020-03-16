@@ -83,11 +83,7 @@ walks$random_walk = c(rep("BaW",5000),rep("BiW",5000),rep("CDHR",5000),rep("RDHR
 
 ```r
 ggplot(walks, aes(x=x, y=y, group=random_walk,col=random_walk)) + 
-  geom_point() + geom_smooth() + labs(title = "uniform sampling on cross_10.ine file / H-polytope")
-```
-
-```
-## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+  geom_point() + labs(title = "uniform sampling on cross_10.ine file / H-polytope")
 ```
 
 ![](test_easy_files/figure-html/plot-1.png)<!-- -->
@@ -111,11 +107,7 @@ q = as.data.frame(r)
 names(q)[1]='x'
 names(q)[2]='y'
 ggplot(q, aes(x=x,y=y)) +
-       geom_point() + geom_smooth()
-```
-
-```
-## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+       geom_point() 
 ```
 
 ![](test_easy_files/figure-html/more_plots_1-1.png)<!-- -->
@@ -136,11 +128,7 @@ q1 = as.data.frame(r)
 names(q1)[1]='x'
 names(q1)[2]='y'
 ggplot(q1, aes(x=x,y=y)) +
-       geom_point() + geom_smooth()
-```
-
-```
-## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+       geom_point() 
 ```
 
 ![](test_easy_files/figure-html/more_plots_2-1.png)<!-- -->
@@ -161,11 +149,7 @@ q2 = as.data.frame(r)
 names(q2)[1]='x'
 names(q2)[2]='y'
 ggplot(q2, aes(x=x,y=y)) +
-       geom_point() + geom_smooth()
-```
-
-```
-## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+       geom_point() 
 ```
 
 ![](test_easy_files/figure-html/more_plots_3-1.png)<!-- -->
@@ -178,11 +162,7 @@ final_points=rbind(q1,q2)
 final_points$random_walk = c(rep("RDHR",2000), rep("BRDHR",2000))
 
 ggplot(final_points, aes(x=x, y=y, group=random_walk,col=random_walk)) + 
-  geom_point() + geom_smooth() + labs(title = "in and out random walks")
-```
-
-```
-## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+  geom_point() + labs(title = "in and out random walks")
 ```
 
 ![](test_easy_files/figure-html/final_plot-1.png)<!-- -->
