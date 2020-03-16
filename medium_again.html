@@ -396,14 +396,14 @@ library(dplyr)</code></pre>
 </div>
 <div id="first-we-try-the-.json-format" class="section level2">
 <h2>First, we try the .json format</h2>
-<div id="we-first-get-the-data." class="section level3">
-<h3>We first get the data.</h3>
+<div id="we-first-get-the-data" class="section level3">
+<h3>We first get the data</h3>
 <pre class="r"><code>data_url = &quot;http://bigg.ucsd.edu/static/models/e_coli_core.json&quot;
 destination_file = &quot;/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.json&quot;
 download.file(data_url, destination_file)</code></pre>
 </div>
-<div id="then-we-parse-them." class="section level3">
-<h3>Then we parse them.</h3>
+<div id="then-we-parse-them" class="section level3">
+<h3>Then we parse them</h3>
 <p>We need to parse the .json file we got, to get a matrix with the reactions and the metabolites that participate in them.</p>
 <pre class="r"><code>data = jsonlite::fromJSON( destination_file )
 

@@ -67,7 +67,7 @@ library(volesti)
 
 ## First, we try the .json format
 
-### We first get the data.
+### We first get the data
 
 
 ```r
@@ -76,7 +76,7 @@ destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.json"
 download.file(data_url, destination_file)
 ```
 
-### Then we parse them.
+### Then we parse them
 We need to parse the .json file we got, to get a matrix with the reactions and the metabolites that participate in them.
 
 
