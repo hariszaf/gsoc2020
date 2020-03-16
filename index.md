@@ -8,7 +8,7 @@ Click on each task to see the relevant answers.
 Compile and run VolEsti. Use the R extension to visualize sampling in a polytope.
 
 ## [Medium task](medium_again.html): 
-Import the [e.coli dataset](bigg.ucsd.edu/models/e_coli_core) from bigg and create a matrix in R
+Import the [e.coli dataset](http://bigg.ucsd.edu/models/e_coli_core) from bigg and create a matrix in R
 
 ## [Hard task](): 
 Support lower dimensional polytopes in volesti and use existing methods to sample from them
