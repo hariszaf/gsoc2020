@@ -9,9 +9,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Support lower dimensional polytopes in volesti and use existing methods to sample from them.
+# Import the e.coli dataset from bigg and create a matrix in R
 
-Here are the libraries needed
+### Here are the libraries needed
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -20,10 +20,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r libraries, include=TRUE}
 library(jsonlite)
 library(dplyr)
+library(R.matlab)
+library(volesti)
 ```
 
+## First, we try the .json format
 
-## We first get the data.
+### We first get the data.
 
 ```{r get_the_data}
 data_url = "http://bigg.ucsd.edu/static/models/e_coli_core.json"
@@ -31,7 +34,7 @@ destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.json"
 download.file(data_url, destination_file)
 ```
 
-## Then we parse them.
+### Then we parse them.
 We need to parse the .json file we got, to get a matrix with the reactions and the metabolites that participate in them.
 
 ```{r parse_them_to_get_a_matrix, echo=TRUE}
@@ -51,8 +54,6 @@ table_as_matrix = as.matrix(table)
 head(table_as_matrix, 4)
 ```
 
-
-
 ### Result 
 Here you can see finally how a single reaction from the network we had, can be seen in the first line of our matrix. One molecule of f6p_c and one atp_c are cosnumed to produce one of adp_c, one of h_c and one of fdp_c.
 
@@ -60,4 +61,52 @@ Here you can see finally how a single reaction from the network we had, can be s
 knitr::include_graphics("https://raw.githubusercontent.com/hariszaf/gsoc2020/master/test_medium_files/figure-html/gsoc2020_reactions.png")
 ```
 
+
+## Second, the .mat format
+### Get the data.. again
+```{r get_the_data_again}
+data_url = "http://bigg.ucsd.edu/static/models/e_coli_core.mat"
+destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.mat"
+download.file(data_url, destination_file)
+```
+
+### Read the data and parse them properly
+```{r read_mat_file}
+data_from_mat = readMat(destination_file)
+
+s_matrix = data_from_mat[1]
+s_matrix = s_matrix[[1]]
+s_matrix = matrix(s_matrix,ncol = ncol(s_matrix), nrow = nrow(s_matrix))
+
+head(s_matrix)
+```
+
+
+### and finally, keep some more info from the data as variables
+
+```{r mat_variables}
+reactions_from_mat = s_matrix[8]
+metabolites_from_mat = s_matrix[1]
+genes_from_mat = s_matrix[5]
+
+```
+
+### and what we have is this:
+
+An enzyme from those that catalyze the reactions:
+```{r show_1}
+reactions_from_mat[[1]][[1]]
+```
+The metabolites that take part: 
+```{r show_2}
+metabolites_from_mat[[1]][[1]]
+```
+And the genes from which these molecules come from:
+```{r show_3}
+genes_from_mat[[1]][[1]]
+```
+
+
+## Discussion
+It seems that the .mat format is easier to handle. However, as this project will be implemented to a great extent in Python, we need to handle the .json format as well. That is because .json format is commonly used when working with Python.
 

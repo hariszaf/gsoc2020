@@ -15,6 +15,16 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Support lower dimensional polytopes in volesti and use existing methods to sample from them
 
+
+
+APO TOLI
+gia hard skeftomoun na kaneis ta e3hs: 
+a) install to cobratoolbox sto matlab, 
+b) na pareis to rounded polytope (full dimensional) apo to matlab kai 
+c) na kanei sampling me to volesti sthn R kai histograms
+
+
+
 Here are the libraries needed
 
 ```{r libraries, include=TRUE}

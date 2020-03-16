@@ -1,7 +1,7 @@
 ---
 title: "test_medium_markdown"
 author: "Haris Zafeiropoulos"
-date: '2020-03-15'
+date: '2020-03-16'
 output:
   html_document: 
     keep_md: yes
@@ -9,9 +9,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Support lower dimensional polytopes in volesti and use existing methods to sample from them.
+# Import the e.coli dataset from bigg and create a matrix in R
 
-Here are the libraries needed
+### Here are the libraries needed
 
 
 
@@ -38,8 +38,36 @@ library(dplyr)
 ##     intersect, setdiff, setequal, union
 ```
 
+```r
+library(R.matlab)
+```
 
-## We first get the data.
+```
+## R.matlab v3.6.2 (2018-09-26) successfully loaded. See ?R.matlab for help.
+```
+
+```
+## 
+## Attaching package: 'R.matlab'
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     getOption, isOpen
+```
+
+```r
+library(volesti)
+```
+
+```
+## Loading required package: Rcpp
+```
+
+## First, we try the .json format
+
+### We first get the data.
 
 
 ```r
@@ -48,7 +76,7 @@ destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.json"
 download.file(data_url, destination_file)
 ```
 
-## Then we parse them.
+### Then we parse them.
 We need to parse the .json file we got, to get a matrix with the reactions and the metabolites that participate in them.
 
 
@@ -107,8 +135,6 @@ head(table_as_matrix, 4)
 ## 4 NA       NA       NA    NA       NA    NA   NA       NA    NA
 ```
 
-
-
 ### Result 
 Here you can see finally how a single reaction from the network we had, can be seen in the first line of our matrix. One molecule of f6p_c and one atp_c are cosnumed to produce one of adp_c, one of h_c and one of fdp_c.
 
@@ -117,4 +143,85 @@ Here you can see finally how a single reaction from the network we had, can be s
 <p class="caption">One of the reactions of the metabolic network. You can see the metabolites that are consumed as well as those that are produced; the network (left) confirms what the matrix shows (right).</p>
 </div>
 
+
+## Second, the .mat format
+### Get the data.. again
+
+```r
+data_url = "http://bigg.ucsd.edu/static/models/e_coli_core.mat"
+destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.mat"
+download.file(data_url, destination_file)
+```
+
+### Read the data and parse them properly
+
+```r
+data_from_mat = readMat(destination_file)
+
+s_matrix = data_from_mat[1]
+s_matrix = s_matrix[[1]]
+s_matrix = matrix(s_matrix,ncol = ncol(s_matrix), nrow = nrow(s_matrix))
+
+head(s_matrix)
+```
+
+```
+##      [,1]      
+## [1,] List,72   
+## [2,] List,72   
+## [3,] List,72   
+## [4,] Numeric,72
+## [5,] List,137  
+## [6,] ?
+```
+
+
+### and finally, keep some more info from the data as variables
+
+
+```r
+reactions_from_mat = s_matrix[8]
+metabolites_from_mat = s_matrix[1]
+genes_from_mat = s_matrix[5]
+```
+
+### and what we have is this:
+
+An enzyme from those that catalyze the reactions:
+
+```r
+reactions_from_mat[[1]][[1]]
+```
+
+```
+## [[1]]
+##      [,1] 
+## [1,] "PFK"
+```
+The metabolites that take part: 
+
+```r
+metabolites_from_mat[[1]][[1]]
+```
+
+```
+## [[1]]
+##      [,1]      
+## [1,] "glc__D_e"
+```
+And the genes from which these molecules come from:
+
+```r
+genes_from_mat[[1]][[1]]
+```
+
+```
+## [[1]]
+##      [,1]   
+## [1,] "b1241"
+```
+
+
+## Discussion
+It seems that the .mat format is easier to handle. However, as this project will be implemented to a great extent in Python, we need to handle the .json format as well. That is because .json format is commonly used when working with Python.
 

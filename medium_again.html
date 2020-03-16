@@ -11,7 +11,7 @@
 
 <meta name="author" content="Haris Zafeiropoulos" />
 
-<meta name="date" content="2020-03-15" />
+<meta name="date" content="2020-03-16" />
 
 <title>test_medium_markdown</title>
 
@@ -365,14 +365,15 @@ summary {
 
 <h1 class="title toc-ignore">test_medium_markdown</h1>
 <h4 class="author">Haris Zafeiropoulos</h4>
-<h4 class="date">2020-03-15</h4>
+<h4 class="date">2020-03-16</h4>
 
 </div>
 
 
-<div id="support-lower-dimensional-polytopes-in-volesti-and-use-existing-methods-to-sample-from-them." class="section level2">
-<h2>Support lower dimensional polytopes in volesti and use existing methods to sample from them.</h2>
-<p>Here are the libraries needed</p>
+<div id="import-the-e.coli-dataset-from-bigg-and-create-a-matrix-in-r" class="section level1">
+<h1>Import the e.coli dataset from bigg and create a matrix in R</h1>
+<div id="here-are-the-libraries-needed" class="section level3">
+<h3>Here are the libraries needed</h3>
 <pre class="r"><code>library(jsonlite)
 library(dplyr)</code></pre>
 <pre><code>## 
@@ -383,15 +384,26 @@ library(dplyr)</code></pre>
 <pre><code>## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(R.matlab)</code></pre>
+<pre><code>## R.matlab v3.6.2 (2018-09-26) successfully loaded. See ?R.matlab for help.</code></pre>
+<pre><code>## 
+## Attaching package: 'R.matlab'</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     getOption, isOpen</code></pre>
+<pre class="r"><code>library(volesti)</code></pre>
+<pre><code>## Loading required package: Rcpp</code></pre>
 </div>
-<div id="we-first-get-the-data." class="section level2">
-<h2>We first get the data.</h2>
+<div id="first-we-try-the-.json-format" class="section level2">
+<h2>First, we try the .json format</h2>
+<div id="we-first-get-the-data." class="section level3">
+<h3>We first get the data.</h3>
 <pre class="r"><code>data_url = &quot;http://bigg.ucsd.edu/static/models/e_coli_core.json&quot;
 destination_file = &quot;/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.json&quot;
 download.file(data_url, destination_file)</code></pre>
 </div>
-<div id="then-we-parse-them." class="section level2">
-<h2>Then we parse them.</h2>
+<div id="then-we-parse-them." class="section level3">
+<h3>Then we parse them.</h3>
 <p>We need to parse the .json file we got, to get a matrix with the reactions and the metabolites that participate in them.</p>
 <pre class="r"><code>data = jsonlite::fromJSON( destination_file )
 
@@ -442,6 +454,7 @@ head(table_as_matrix, 4)</code></pre>
 ## 2 NA       NA       NA    NA       NA    NA   NA       NA    NA   
 ## 3 NA       NA       NA    NA       NA    NA   NA       NA    NA   
 ## 4 NA       NA       NA    NA       NA    NA   NA       NA    NA</code></pre>
+</div>
 <div id="result" class="section level3">
 <h3>Result</h3>
 <p>Here you can see finally how a single reaction from the network we had, can be seen in the first line of our matrix. One molecule of f6p_c and one atp_c are cosnumed to produce one of adp_c, one of h_c and one of fdp_c.</p>
@@ -451,6 +464,61 @@ head(table_as_matrix, 4)</code></pre>
 One of the reactions of the metabolic network. You can see the metabolites that are consumed as well as those that are produced; the network (left) confirms what the matrix shows (right).
 </p>
 </div>
+</div>
+</div>
+<div id="second-the-.mat-format" class="section level2">
+<h2>Second, the .mat format</h2>
+<div id="get-the-data..-again" class="section level3">
+<h3>Get the data.. again</h3>
+<pre class="r"><code>data_url = &quot;http://bigg.ucsd.edu/static/models/e_coli_core.mat&quot;
+destination_file = &quot;/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.mat&quot;
+download.file(data_url, destination_file)</code></pre>
+</div>
+<div id="read-the-data-and-parse-them-properly" class="section level3">
+<h3>Read the data and parse them properly</h3>
+<pre class="r"><code>data_from_mat = readMat(destination_file)
+
+s_matrix = data_from_mat[1]
+s_matrix = s_matrix[[1]]
+s_matrix = matrix(s_matrix,ncol = ncol(s_matrix), nrow = nrow(s_matrix))
+
+head(s_matrix)</code></pre>
+<pre><code>##      [,1]      
+## [1,] List,72   
+## [2,] List,72   
+## [3,] List,72   
+## [4,] Numeric,72
+## [5,] List,137  
+## [6,] ?</code></pre>
+</div>
+<div id="and-finally-keep-some-more-info-from-the-data-as-variables" class="section level3">
+<h3>and finally, keep some more info from the data as variables</h3>
+<pre class="r"><code>reactions_from_mat = s_matrix[8]
+metabolites_from_mat = s_matrix[1]
+genes_from_mat = s_matrix[5]</code></pre>
+</div>
+<div id="and-what-we-have-is-this" class="section level3">
+<h3>and what we have is this:</h3>
+<p>An enzyme from those that catalyze the reactions:</p>
+<pre class="r"><code>reactions_from_mat[[1]][[1]]</code></pre>
+<pre><code>## [[1]]
+##      [,1] 
+## [1,] &quot;PFK&quot;</code></pre>
+<p>The metabolites that take part:</p>
+<pre class="r"><code>metabolites_from_mat[[1]][[1]]</code></pre>
+<pre><code>## [[1]]
+##      [,1]      
+## [1,] &quot;glc__D_e&quot;</code></pre>
+<p>And the genes from which these molecules come from:</p>
+<pre class="r"><code>genes_from_mat[[1]][[1]]</code></pre>
+<pre><code>## [[1]]
+##      [,1]   
+## [1,] &quot;b1241&quot;</code></pre>
+</div>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
+<p>It seems that the .mat format is easier to handle. However, as this project will be implemented to a great extent in Python, we need to handle the .json format as well. That is because .json format is commonly used when working with Python.</p>
 </div>
 </div>
 
