@@ -149,48 +149,49 @@ Here you can see finally how a single reaction from the network we had, can be s
 
 ```r
 data_url = "http://bigg.ucsd.edu/static/models/e_coli_core.mat"
-destination_file = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.mat"
+destination_file_mat = "/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.mat"
 download.file(data_url, destination_file)
 ```
 
 ### Read the data and parse them properly
 
 ```r
-data_from_mat = readMat(destination_file)
+parse_data_from_mat_file <- function(destination_file) {
+  data_from_mat = readMat(destination_file)
 
-s_matrix = data_from_mat[1]
-s_matrix = s_matrix[[1]]
-s_matrix = matrix(s_matrix,ncol = ncol(s_matrix), nrow = nrow(s_matrix))
+  s_matrix = data_from_mat[1]
+  s_matrix = s_matrix[[1]]
+  s_matrix = matrix(s_matrix,ncol = ncol(s_matrix), nrow = nrow(s_matrix))
+  
+  reactions_from_mat = s_matrix[8]
+  metabolites_from_mat = s_matrix[1]
+  genes_from_mat = s_matrix[5]
 
-head(s_matrix)
+  
+  # lb = data_from_mat[6]
+  # lb = lb[[1]]
+  # d = dim(s_matrix)[2]
+  # d = length(lb)
+  # A = rbind(diag(d), -diag(d))
+  
+    
+  data_object = list(s_matrix, reactions_from_mat, metabolites_from_mat, genes_from_mat)
+  
+  return(data_object)
+}
+
+new_parse = parse_data_from_mat_file(destination_file_mat)
 ```
 
-```
-##      [,1]      
-## [1,] List,72   
-## [2,] List,72   
-## [3,] List,72   
-## [4,] Numeric,72
-## [5,] List,137  
-## [6,] ?
-```
 
 
-### and finally, keep some more info from the data as variables
-
-
-```r
-reactions_from_mat = s_matrix[8]
-metabolites_from_mat = s_matrix[1]
-genes_from_mat = s_matrix[5]
-```
 
 ### and what we have is this:
 
 An enzyme from those that catalyze the reactions:
 
 ```r
-reactions_from_mat[[1]][[1]]
+new_parse[[2]][[1]][[1]]
 ```
 
 ```
@@ -201,7 +202,7 @@ reactions_from_mat[[1]][[1]]
 The metabolites that take part: 
 
 ```r
-metabolites_from_mat[[1]][[1]]
+new_parse[[3]][[1]][[1]]
 ```
 
 ```
@@ -212,7 +213,7 @@ metabolites_from_mat[[1]][[1]]
 And the genes from which these molecules come from:
 
 ```r
-genes_from_mat[[1]][[1]]
+new_parse[[4]][[1]][[1]]
 ```
 
 ```

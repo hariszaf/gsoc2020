@@ -471,46 +471,51 @@ One of the reactions of the metabolic network. You can see the metabolites that 
 <div id="get-the-data..-again" class="section level3">
 <h3>Get the data.. again</h3>
 <pre class="r"><code>data_url = &quot;http://bigg.ucsd.edu/static/models/e_coli_core.mat&quot;
-destination_file = &quot;/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.mat&quot;
+destination_file_mat = &quot;/home/haris/Desktop/gsoc2020/gsoc2020/e_coli_core.mat&quot;
 download.file(data_url, destination_file)</code></pre>
 </div>
 <div id="read-the-data-and-parse-them-properly" class="section level3">
 <h3>Read the data and parse them properly</h3>
-<pre class="r"><code>data_from_mat = readMat(destination_file)
+<pre class="r"><code>parse_data_from_mat_file &lt;- function(destination_file) {
+  data_from_mat = readMat(destination_file)
 
-s_matrix = data_from_mat[1]
-s_matrix = s_matrix[[1]]
-s_matrix = matrix(s_matrix,ncol = ncol(s_matrix), nrow = nrow(s_matrix))
+  s_matrix = data_from_mat[1]
+  s_matrix = s_matrix[[1]]
+  s_matrix = matrix(s_matrix,ncol = ncol(s_matrix), nrow = nrow(s_matrix))
+  
+  reactions_from_mat = s_matrix[8]
+  metabolites_from_mat = s_matrix[1]
+  genes_from_mat = s_matrix[5]
 
-head(s_matrix)</code></pre>
-<pre><code>##      [,1]      
-## [1,] List,72   
-## [2,] List,72   
-## [3,] List,72   
-## [4,] Numeric,72
-## [5,] List,137  
-## [6,] ?</code></pre>
-</div>
-<div id="and-finally-keep-some-more-info-from-the-data-as-variables" class="section level3">
-<h3>and finally, keep some more info from the data as variables</h3>
-<pre class="r"><code>reactions_from_mat = s_matrix[8]
-metabolites_from_mat = s_matrix[1]
-genes_from_mat = s_matrix[5]</code></pre>
+  
+  # lb = data_from_mat[6]
+  # lb = lb[[1]]
+  # d = dim(s_matrix)[2]
+  # d = length(lb)
+  # A = rbind(diag(d), -diag(d))
+  
+    
+  data_object = list(s_matrix, reactions_from_mat, metabolites_from_mat, genes_from_mat)
+  
+  return(data_object)
+}
+
+new_parse = parse_data_from_mat_file(destination_file_mat)</code></pre>
 </div>
 <div id="and-what-we-have-is-this" class="section level3">
 <h3>and what we have is this:</h3>
 <p>An enzyme from those that catalyze the reactions:</p>
-<pre class="r"><code>reactions_from_mat[[1]][[1]]</code></pre>
+<pre class="r"><code>new_parse[[2]][[1]][[1]]</code></pre>
 <pre><code>## [[1]]
 ##      [,1] 
 ## [1,] &quot;PFK&quot;</code></pre>
 <p>The metabolites that take part:</p>
-<pre class="r"><code>metabolites_from_mat[[1]][[1]]</code></pre>
+<pre class="r"><code>new_parse[[3]][[1]][[1]]</code></pre>
 <pre><code>## [[1]]
 ##      [,1]      
 ## [1,] &quot;glc__D_e&quot;</code></pre>
 <p>And the genes from which these molecules come from:</p>
-<pre class="r"><code>genes_from_mat[[1]][[1]]</code></pre>
+<pre class="r"><code>new_parse[[4]][[1]][[1]]</code></pre>
 <pre><code>## [[1]]
 ##      [,1]   
 ## [1,] &quot;b1241&quot;</code></pre>
