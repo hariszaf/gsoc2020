@@ -53,7 +53,7 @@ rounded_polytope = readMat(rounded_polytope_file)
 rounded_polytope = rounded_polytope$poly
 ```
 
-### We keen all the variables needed in order to move from the rounded polytope back to the initial as well as from the low back to full dimension.
+#### We keep all the variables needed in order to move from the rounded polytope back to the initial as well as from the low back to full dimension.
 
 ```r
 A_init = rounded_polytope[1]
@@ -73,13 +73,14 @@ shift_init = shift_init[[1]]
 shift = shift_init[[1]]
 ```
 
-And now we have A and b defining our initial polytope (before the transformations occured in the Matlab step), N for getting fron n-m dimensions back to n and shift a variable that allows us to move our polytope. 
+And now we have A and b defining our full dimensional polytope (this transformations occured in the Matlab step), N for getting fron n-m dimensions back to n (low dimensional polytope) and 'shift' a variable that allows us to move our polytope. 
+
 ### Now we need to sample from our rounded, low dimension polytope
 
 ```r
 N = 2000
 full_dim_polytope = Hpolytope$new(A=A, b=b)
-points = sample_points(full_dim_polytope, n=N, random_walk = list("walk" = "BiW", "walk_length" = 1))
+points = sample_points(full_dim_polytope, n=N, random_walk = list("walk" = "BiW", "walk_length" = 2))
 dim(points)
 ```
 
@@ -91,8 +92,8 @@ dim(points)
 ### Now we need to map our sampling points, back to the full dimension polytope
 
 ```r
-maped_points = G%*%points + matrix(rep(shift,N), ncol = N)
-dim(maped_points)
+steady_states = G%*%points + matrix(rep(shift,N), ncol = N)
+dim(steady_states)
 ```
 
 ```
@@ -100,9 +101,25 @@ dim(maped_points)
 ```
 
 
+### And now we can see what happens in a specific reaction when our system is at steady state
+
+```r
+hist(steady_states[12,], # my sampling points when returned in the low dimensional polytope
+     col="#001440", # column color
+     border="red",
+     prob = TRUE, # show densities instead of frequencies
+     xlab = "Flux (mmol/gDW/h)",
+     main = "")
+```
+
+![](test_hard_files/figure-html/mapping_2-1.png)<!-- -->
+
+#### And in fact, how the different reactions of our metabolic network differ at the steady states of our system
+![](test_hard_files/figure-html/mapping_3-1.png)<!-- -->
 
 
 
+![](test_hard_files/figure-html/mapping-1.png)<!-- -->
 
 
 
