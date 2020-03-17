@@ -63,7 +63,7 @@ rounded_polytope = readMat(rounded_polytope_file)
 rounded_polytope = rounded_polytope$poly
 ```
 
-#### We keep all the variables needed in order to move from the rounded polytope back to the initial as well as from the low back to full dimension.
+#### We keep all the variables needed in order to move from the rounded polytope back to the initial.
 ```{r keep_variables, include=TRUE}
 A_init = rounded_polytope[1]
 A_init = A_init[[1]]
@@ -82,7 +82,7 @@ shift_init = shift_init[[1]]
 shift = shift_init[[1]]
 ```
 
-And now we have A and b defining our full dimensional polytope (this transformations occured in the Matlab step), N for getting fron n-m dimensions back to n (low dimensional polytope) and 'shift' a variable that allows us to move our polytope. 
+And now we have A and b defining our full dimensional polytope (this transformations occured in the Matlab step), G for getting fron n-m dimensions back to n (low dimensional polytope) and 'shift' a variable that allows us to move our polytope. 
 
 #### Sample from our rounded, low dimension polytope
 ```{r sampling, include=TRUE}
