@@ -13,9 +13,42 @@ editor_options:
 
 ## Support lower dimensional polytopes in volesti and use existing methods to sample from them
 
+### COBRA Toolbox and MATLAB
+
+The following code was performed on MATLAB (see on [COBRA Toolbox tutorial](https://opencobra.github.io/cobratoolbox/latest/tutorials/tutorialUniformSampling.html)) in oder to get a fully dimensional polytope, sample on it and then plot the values of a certain reaction (coordinate 12). 
+
+
+```matlab_core
+load('e_coli_core.mat')
+model = e_coli_core;
+ATP = 'ATPS4r'; 
+ibm = find(ismember(model.rxns, ATP)); % column index of the ATP demand reaction
+model.c = zeros(length(model.c),1);
+model.csense=model.csense';
+[samples, roundedPolytope, minFlux, maxFlux] = chrrSampler(model, 100, 2000,1);
+ibm=12
+nbins = 20;
+[yUn, xUn] = hist(samples(ibm, : ), nbins);
+f2 = figure;
+plot(xUn, yUn);
+xlabel('Flux (mmol/gDW/h)')
+ylabel('# samples')
+```
+
+Here is the plot returned:
+<div class="figure">
+<img src="https://raw.githubusercontent.com/hariszaf/gsoc2020/master/test_hard_files/figure-html/matlab_plot.jpg" alt="Plot from MATLAB" width="75%" />
+<p class="caption">Plot from MATLAB</p>
+</div>
+
+
+
+### Volesti and R 
+
+
+Simultaneously, we performed the similar task using volesti R package in order to compare the output returned.
 
 Here are the libraries needed
-
 
 ```r
 library(ggplot2)
@@ -45,7 +78,7 @@ library(volesti)
 ## Loading required package: Rcpp
 ```
 
-### Get the rounded polytope file (.mat) and read it 
+#### Get the rounded polytope file (.mat) and read it 
 
 ```r
 rounded_polytope_file = "/home/haris/Desktop/gsoc2020/gsoc2020/roundedPolytope.mat"
@@ -75,7 +108,7 @@ shift = shift_init[[1]]
 
 And now we have A and b defining our full dimensional polytope (this transformations occured in the Matlab step), N for getting fron n-m dimensions back to n (low dimensional polytope) and 'shift' a variable that allows us to move our polytope. 
 
-### Now we need to sample from our rounded, low dimension polytope
+#### Sample from our rounded, low dimension polytope
 
 ```r
 N = 2000
@@ -89,7 +122,7 @@ dim(points)
 ```
 
 
-### Now we need to map our sampling points, back to the full dimension polytope
+#### Map our sampling points back to the full dimension polytope
 
 ```r
 steady_states = G%*%points + matrix(rep(shift,N), ncol = N)
@@ -101,7 +134,10 @@ dim(steady_states)
 ```
 
 
-### And now we can see what happens in a specific reaction when our system is at steady state
+### Comparison 
+
+#### And this is the corresponding plot for our comparison with COBRA Toolbox (coordinate 12)
+
 
 ```r
 hist(steady_states[12,], # my sampling points when returned in the low dimensional polytope
@@ -114,7 +150,7 @@ hist(steady_states[12,], # my sampling points when returned in the low dimension
 
 ![](test_hard_files/figure-html/mapping_2-1.png)<!-- -->
 
-#### And in fact, how the different reactions of our metabolic network differ at the steady states of our system
+#### And here is an example of how the different reactions of our metabolic network differ at the steady states
 ![](test_hard_files/figure-html/mapping_3-1.png)<!-- -->
 
 
