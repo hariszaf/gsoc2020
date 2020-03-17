@@ -91,7 +91,6 @@ hist(steady_states[43,], # my sampling points when returned in the low dimension
 ```
 
 
-
 ```{r mapping, include=TRUE, echo=FALSE}
 hist(steady_states[82,], # my sampling points when returned in the low dimensional polytope
      col="#001440", # column color

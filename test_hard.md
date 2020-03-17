@@ -118,7 +118,6 @@ hist(steady_states[12,], # my sampling points when returned in the low dimension
 ![](test_hard_files/figure-html/mapping_3-1.png)<!-- -->
 
 
-
 ![](test_hard_files/figure-html/mapping-1.png)<!-- -->
 
 
