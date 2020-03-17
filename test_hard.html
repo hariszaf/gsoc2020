@@ -11,7 +11,7 @@
 
 <meta name="author" content="Haris Zafeiropoulos" />
 
-<meta name="date" content="2020-03-15" />
+<meta name="date" content="2020-03-17" />
 
 <title>test_hard_markdown</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">test_hard_markdown</h1>
 <h4 class="author">Haris Zafeiropoulos</h4>
-<h4 class="date">2020-03-15</h4>
+<h4 class="date">2020-03-17</h4>
 
 </div>
 
@@ -373,6 +373,52 @@ summary {
 <div id="support-lower-dimensional-polytopes-in-volesti-and-use-existing-methods-to-sample-from-them" class="section level2">
 <h2>Support lower dimensional polytopes in volesti and use existing methods to sample from them</h2>
 <p>Here are the libraries needed</p>
+<pre class="r"><code>library(ggplot2)
+library(R.matlab)</code></pre>
+<pre><code>## R.matlab v3.6.2 (2018-09-26) successfully loaded. See ?R.matlab for help.</code></pre>
+<pre><code>## 
+## Attaching package: 'R.matlab'</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     getOption, isOpen</code></pre>
+<pre class="r"><code>library(volesti)</code></pre>
+<pre><code>## Loading required package: Rcpp</code></pre>
+<div id="get-the-rounded-polytope-file-.mat-and-read-it" class="section level3">
+<h3>Get the rounded polytope file (.mat) and read it</h3>
+<pre class="r"><code>rounded_polytope_file = &quot;/home/haris/Desktop/gsoc2020/gsoc2020/roundedPolytope.mat&quot;
+rounded_polytope = readMat(rounded_polytope_file)
+rounded_polytope = rounded_polytope$poly</code></pre>
+</div>
+<div id="we-keen-all-the-variables-needed-in-order-to-move-from-the-rounded-polytope-back-to-the-initial-as-well-as-from-the-low-back-to-full-dimension." class="section level3">
+<h3>We keen all the variables needed in order to move from the rounded polytope back to the initial as well as from the low back to full dimension.</h3>
+<pre class="r"><code>A_init = rounded_polytope[1]
+A_init = A_init[[1]]
+A = A_init[[1]]
+
+b_init = rounded_polytope[2]
+b_init = b_init[[1]]
+b = b_init[[1]]
+
+G_init = rounded_polytope[5]
+G_init = G_init[[1]]
+G = G_init[[1]]
+
+shift_init = rounded_polytope[6]
+shift_init = shift_init[[1]]
+shift = shift_init[[1]]</code></pre>
+<p>And now we have A and b defining our initial polytope (before the transformations occured in the Matlab step), N for getting fron n-m dimensions back to n and shift a variable that allows us to move our polytope. ### Now we need to sample from our rounded, low dimension polytope</p>
+<pre class="r"><code>N = 2000
+full_dim_polytope = Hpolytope$new(A=A, b=b)
+points = sample_points(full_dim_polytope, n=N, random_walk = list(&quot;walk&quot; = &quot;BiW&quot;, &quot;walk_length&quot; = 1))
+dim(points)</code></pre>
+<pre><code>## [1]   24 2000</code></pre>
+</div>
+<div id="now-we-need-to-map-our-sampling-points-back-to-the-full-dimension-polytope" class="section level3">
+<h3>Now we need to map our sampling points, back to the full dimension polytope</h3>
+<pre class="r"><code>maped_points = G%*%points + matrix(rep(shift,N), ncol = N)
+dim(maped_points)</code></pre>
+<pre><code>## [1]   95 2000</code></pre>
+</div>
 </div>
 
 
